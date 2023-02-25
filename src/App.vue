@@ -2,7 +2,7 @@
 <div>
     <form>
         <label>Search hashtag :</label>
-        <input class="inputField" type="text" v-model="searchTerm" @keyup="searchHash" />
+        <input class="inputField" type="text" v-model="searchTerm" @keyup="debounceSearch" />
 
     </form>
     <div class="cardWrapper">
@@ -25,6 +25,7 @@
 
 <script>
 import blogCard from "./components/cards.vue";
+import debounce from 'lodash/debounce';
 
 export default {
     name: "App",
@@ -88,9 +89,11 @@ export default {
             const blogData = this.blogDatas.find((data) => data.id === id);
             blogData.like++;
         },
-        searchHash() {
+
+        debouncedSearch: debounce(function () {
             this.selectedHashtag = this.searchTerm;
-        },
+        }, 500),
+
     },
 
 };
