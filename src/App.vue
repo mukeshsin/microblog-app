@@ -2,15 +2,15 @@
 <div>
     <form>
         <label>Search hashtag :</label>
-        <input class="inputField" type="text" v-model="searchTerm" />
+        <input class="inputField" type="text" v-model="searchTerm" @keyup="searchHash" />
 
     </form>
     <div class="cardWrapper">
-        <blogCard v-for="blogData in blogDatas" :key="blogData.id">
+        <blogCard v-for="blogData in filteredBlogDatas" :key="blogData.id">
             <template v-slot:title>{{ blogData.title }}</template>
             <template v-slot:content>{{ blogData.content }}</template>
             <template v-slot:likes>
-                <div class="icon">
+                <div class="icon" @click="increaseLike(blogData.id)">
                     <i class="fa-sharp fa-solid fa-heart"></i>
                     <p class="numbLike">{{ blogData.like }}</p>
                 </div>
@@ -63,7 +63,34 @@ export default {
                 },
             ],
 
+            searchTerm: "",
+            selectedHashtag: null,
+
         };
+    },
+    computed: {
+        filteredBlogDatas() {
+            if (this.selectedHashtag) {
+                return this.blogDatas.filter((blogData) =>
+                    blogData.hashtags.includes(this.selectedHashtag)
+                );
+            } else {
+                return this.blogDatas.filter((blogData) =>
+                    blogData.hashtags.some((hashtag) =>
+                        hashtag.includes(this.searchTerm)
+                    )
+                );
+            }
+        },
+    },
+    methods: {
+        increaseLike(id) {
+            const blogData = this.blogDatas.find((data) => data.id === id);
+            blogData.like++;
+        },
+        searchHash() {
+            this.selectedHashtag = this.searchTerm;
+        },
     },
 
 };
@@ -95,7 +122,6 @@ export default {
     color: red;
 }
 
-
 form {
     margin-left: 10px;
     margin-top: 10px;
@@ -110,10 +136,7 @@ input {
     border: none;
     border-bottom: 1px solid black;
     height: 18px;
-    margin-left:5px;
-    font-size:15px
-
+    margin-left: 5px;
+    font-size: 15px
 }
-
-
 </style>
