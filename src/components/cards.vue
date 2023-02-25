@@ -5,16 +5,18 @@
     </div>
 
     <div class="card-content">
-        <slot name="description"></slot>
+        <slot name="content"></slot>
 
     </div>
-
     <div class="card-footer">
-        <slot name="likes"></slot>
-        <slot name="hashTags"></slot>
+        <div class="card-likes">
+            <slot name="likes"></slot>
+        </div>
+        <div class="card-hashtag">
+            <slot name="hashTags"></slot>
+        </div>
 
     </div>
-
 </div>
 </template>
 
@@ -22,43 +24,48 @@
 export default {
     name: "blogCard",
 }
-
 </script>
 
 <style scoped>
 .cards {
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
-    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
+    border: 2px solid grey;
     margin: 10px;
-    width: 400px;
-    float: right;
+    width: 15%;
+    box-shadow: 1px 2px 3px 2px #888888;
+    border-radius:7px;
+
 }
 
 .card-header {
-    background-color: #eee;
-    border-bottom: 2px solid #ccc;
-    font-weight: bold;
-    font-size: 20px;
-    padding: 10px;
+    height: 50px;
+    border-bottom: solid 2px grey;
+    width: 100%;
+    font-size: 23px;
+    padding-bottom: 12px;
     text-align: center;
-    font-family: Arial, Helvetica, sans-serif;
+    margin-top: 10px;
+    font-weight: bold;
+    font-family: 'Times New Roman', Times, serif
 }
 
 .card-content {
-    display: flex;
-    justify-content: center;
-    padding: 10px;
+    height: 100px;
+    width: 100%;
+    border-bottom: solid 2px grey;
+    margin-top: 7px;
+    padding-bottom: 40px;
+    font-weight: bold;
 }
 
 .card-footer {
-    border-top: 1px solid #ccc;
-    padding: 10px;
-    text-align: center;
-    height: 40px;
-    font-family: Verdana, Geneva, Tahoma, sans-serif;
-    font-weight: 500;
+
+    height: 130px;
+    width: 100%;
+    font-weight: bold;
 
 }
 </style>

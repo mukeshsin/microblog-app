@@ -1,82 +1,119 @@
 <template>
-  <div>
+<div>
     <form>
-      <h1 class="searchTag">Search hashtag</h1>
-      <input class="inputField" type="text" v-model="searchTerm" />
+        <label>Search hashtag :</label>
+        <input class="inputField" type="text" v-model="searchTerm" />
+
     </form>
     <div class="cardWrapper">
-      <blogCard v-for="blogData in blogDatas" :key="blogData.id">
-        <template v-slot:title>{{ blogData.title }}</template>
-        <template v-slot:description>{{ blogData.description }}</template>
-        <template v-slot:footer>
-          <div class="likes">
-            <div class="icon" @click="increaseLike(blogData.id)">
-              <i class="fa-sharp fa-solid fa-heart"></i>
-            </div>
-            <p>{{ blogData.like }}</p>
-          </div>
-          <div v-for="hashtag in blogDatas.hashtags" :key="hashtag">{{ hashtag }}</div>
-        </template>
-      </blogCard>
+        <blogCard v-for="blogData in blogDatas" :key="blogData.id">
+            <template v-slot:title>{{ blogData.title }}</template>
+            <template v-slot:content>{{ blogData.content }}</template>
+            <template v-slot:likes>
+                <div class="icon">
+                    <i class="fa-sharp fa-solid fa-heart"></i>
+                    <p class="numbLike">{{ blogData.like }}</p>
+                </div>
+            </template>
+            <template v-slot:hashTags>
+                <div v-for="hashtag in blogData.hashtags" :key="hashtag">{{ hashtag }}</div>
+            </template>
+        </blogCard>
     </div>
-  </div>
+</div>
 </template>
 
 <script>
-
-import  blogCard  from "./components/cards.vue";
+import blogCard from "./components/cards.vue";
 
 export default {
-  name: "App",
-  components: {
-    blogCard
-  },
-  data() {
-    return {
-      blogDatas: [
-          {
-            id: 1,
-            title: "Learning Vue js 3",
-            content:
-              "I am Learning Vue js 3 with the composition API.it is great",
-            like: 5,
-            hashtags: ["#Vue", "#Javascript", "#CompositionApi"],
-          },
-          {
-            id: 2,
-            title: "Learning Vuex",
-            content:
-              "vuex is a state management solution for Vue .its allows you to logically separate entities into Modules.",
-            like: 3,
-            hashtags: ["#Vue", "#Vuex", "#Flux"],
-          },
-          {
-            id: 3,
-            title: "Routing With Vue Router",
-            content: "I am creating complex front-end app using vue-router",
-            like: 1,
-            hashtags: ["#Vue", "#VueRouter"],
-          },
-          {
-            id: 4,
-            title: "Testing Vue Apps",
-            content:
-              "I am writing Some Tests for My application using test utils. Testing is critical but often overlooked due to complexity or time constraints",
-            like: 1,
-            hashtags: ["#Vue", "#Javascript", "#Testing"],
-          },
-        ],
-      searchTerm: "",
-    };
-  },
- 
+    name: "App",
+    components: {
+        blogCard
+    },
+    data() {
+        return {
+            blogDatas: [{
+                    id: 1,
+                    title: "Learning Vue js 3",
+                    content: "I am Learning Vue js 3 with the composition API.it is great",
+                    like: 5,
+                    hashtags: ["#Vue", "#Javascript", "#CompositionApi"],
+                },
+                {
+                    id: 2,
+                    title: "Learning Vuex",
+                    content: "vuex is a state management solution for Vue .its allows you to logically separate entities into Modules.",
+                    like: 3,
+                    hashtags: ["#Vue", "#Vuex", "#Flux"],
+                },
+                {
+                    id: 3,
+                    title: "Routing With Vue Router",
+                    content: "I am creating complex front-end app using vue-router",
+                    like: 1,
+                    hashtags: ["#Vue", "#VueRouter"],
+                },
+                {
+                    id: 4,
+                    title: "Testing Vue Apps",
+                    content: "I am writing Some Tests for My application using test utils. Testing is critical but often overlooked due to complexity or time constraints",
+                    like: 1,
+                    hashtags: ["#Vue", "#Javascript", "#Testing"],
+                },
+            ],
+
+        };
+    },
+
 };
 </script>
 
 <style>
 .cardWrapper {
-  border: 2px solid black;
-  width: 200px;
-  height: 300px;
+    display: flex;
+
 }
+
+.adjustInput {
+    margin-left: 30px;
+    margin-bottom: 50px;
+}
+
+.inputField {
+    border: none;
+    border-bottom: 2px solid black;
+}
+
+.searchTag {
+    font-size: 20px;
+    font-family: Arial;
+    margin-top: 20px;
+}
+
+.icon i {
+    color: red;
+}
+
+
+form {
+    margin-left: 10px;
+    margin-top: 10px;
+    font-weight: bold;
+}
+
+label {
+    font-size: 18px;
+}
+
+input {
+    border: none;
+    border-bottom: 1px solid black;
+    height: 18px;
+    margin-left:5px;
+    font-size:15px
+
+}
+
+
 </style>
