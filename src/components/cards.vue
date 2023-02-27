@@ -36,7 +36,7 @@ export default {
     margin: 10px;
     width: 15%;
     box-shadow: 1px 2px 3px 2px #888888;
-    border-radius:7px;
+    border-radius: 7px;
 
 }
 
