@@ -25,7 +25,6 @@
 
 <script>
 import blogCard from "./components/cards.vue";
-import debounce from 'lodash/debounce';
 
 export default {
     name: "App",
@@ -66,6 +65,7 @@ export default {
 
             searchTerm: "",
             selectedHashtag: null,
+            timer: null
 
         };
     },
@@ -90,12 +90,14 @@ export default {
             blogData.like++;
         },
 
-        debouncedSearch: debounce(function () {
-            this.selectedHashtag = this.searchTerm;
-        }, 500),
+        debounceSearch: function () {
+            clearTimeout(this.timer);
+            this.timer = setTimeout(() => {
+                this.selectedHashtag = this.searchTerm;
+            }, 500);
+        },
 
-    },
-
+    }
 };
 </script>
 
