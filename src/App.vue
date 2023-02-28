@@ -1,7 +1,7 @@
 <template>
 <div>
     <form>
-        <label>Search hashtag :</label>
+        <label>Search hashtag : #</label>
         <input class="inputField" type="text" v-model="searchTerm" @keyup="debounceSearch" />
     </form>
     <div class="cardWrapper">
@@ -14,8 +14,10 @@
                     <p class="numbLike">{{ blogData.like }}</p>
                 </div>
             </template>
-            <template v-slot:hashTags>
-                <div v-for="hashtag in blogData.hashtags" :key="hashtag">{{ hashtag }}</div>
+            <template v-slot:topics>
+                <div v-for="topic in blogData.topics" :key="topic.id">
+                    <span @click="hashTag(topic)"> {{ topic }}</span>
+                </div>
             </template>
         </blogCard>
     </div>
@@ -40,32 +42,39 @@ export default {
         const {
             blogDatas,
             searchTerm,
-            selectedHashtag,
+            selectedTopic,
             timer,
             increaseLike,
             debounceSearch,
         } = blogData();
 
         const filteredBlogDatas = computed(() => {
-            if (selectedHashtag.value) {
+            if (selectedTopic.value) {
                 return blogDatas.value.filter((blogData) =>
-                    blogData.hashtags.includes(selectedHashtag.value)
+                    blogData.topics.includes(selectedTopic.value)
                 );
             } else {
                 return blogDatas.value.filter((blogData) =>
-                    blogData.hashtags.some((hashtag) => hashtag.includes(searchTerm.value))
+                    blogData.topics.some((topic) => topic.includes(searchTerm.value))
                 );
             }
         });
 
+        const hashTag = (topic) => {
+            selectedTopic.value = topic;
+            searchTerm.value = '';
+        };
+
         return {
             blogDatas,
             searchTerm,
-            selectedHashtag,
+            selectedTopic,
             timer,
             increaseLike,
             debounceSearch,
             filteredBlogDatas,
+            hashTag
+
         };
     },
 };

@@ -7,7 +7,7 @@ export const blogData = () => {
       title: "Learning Vue js 3",
       content: "I am Learning Vue js 3 with the composition API.it is great",
       like: 5,
-      hashtags: ["#Vue", "#Javascript", "#CompositionApi"],
+      topics: ["#Vue", "#Javascript", "#CompositionApi"],
     },
     {
       id: 2,
@@ -15,14 +15,14 @@ export const blogData = () => {
       content:
         "vuex is a state management solution for Vue .its allows you to logically separate entities into Modules.",
       like: 3,
-      hashtags: ["#Vue", "#Vuex", "#Flux"],
+      topics: ["#Vue", "#Vuex", "#Flux"],
     },
     {
       id: 3,
       title: "Routing With Vue Router",
       content: "I am creating complex front-end app using vue-router",
       like: 1,
-      hashtags: ["#Vue", "#VueRouter"],
+      topics: ["#Vue", "#VueRouter"],
     },
     {
       id: 4,
@@ -30,12 +30,12 @@ export const blogData = () => {
       content:
         "I am writing Some Tests for My application using test utils. Testing is critical but often overlooked due to complexity or time constraints",
       like: 1,
-      hashtags: ["#Vue", "#Javascript", "#Testing"],
+      topics: ["#Vue", "#Javascript", "#Testing"],
     },
   ]);
 
   const searchTerm = ref("");
-  const selectedHashtag = ref(null);
+  const selectedTopic = ref(null);
   const timer = ref(null);
 
   const increaseLike = (id) => {
@@ -46,14 +46,14 @@ export const blogData = () => {
   const debounceSearch = () => {
     clearTimeout(timer.value);
     timer.value = setTimeout(() => {
-      selectedHashtag.value = searchTerm.value;
+      selectedTopic.value = '';
     }, 500);
   };
 
   return {
     blogDatas,
     searchTerm,
-    selectedHashtag,
+    selectedTopic,
     timer,
     increaseLike,
     debounceSearch,

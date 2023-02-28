@@ -12,8 +12,8 @@
         <div class="card-likes">
             <slot name="likes"></slot>
         </div>
-        <div class="card-hashtag">
-            <slot name="hashTags"></slot>
+        <div class="card-topics">
+            <slot name="topics"></slot>
         </div>
 
     </div>
