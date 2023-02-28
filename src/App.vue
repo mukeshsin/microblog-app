@@ -1,9 +1,8 @@
 <template>
 <div>
     <form>
-        <label>Search hashtag :</label>
+        <label>Search hashtag: #</label>
         <input class="inputField" type="text" v-model="searchTerm" @keyup="debounceSearch" />
-
     </form>
     <div class="cardWrapper">
         <blogCard v-for="blogData in filteredBlogDatas" :key="blogData.id">
@@ -15,8 +14,10 @@
                     <p class="numbLike">{{ blogData.like }}</p>
                 </div>
             </template>
-            <template v-slot:hashTags>
-                <div v-for="hashtag in blogData.hashtags" :key="hashtag">{{ hashtag }}</div>
+            <template v-slot:topics>
+                <div v-for="topic in blogData.topics" :key="topic.id">
+                    <span @click="hashTag(topic)"> {{ topic }}</span>
+                </div>
             </template>
         </blogCard>
     </div>
@@ -24,80 +25,58 @@
 </template>
 
 <script>
-import blogCard from "./components/cards.vue";
+import {
+    computed
+} from 'vue';
+import {
+    blogData
+} from './components/microblog.js';
+import blogCard from './components/cards.vue';
 
 export default {
-    name: "App",
+    name: 'App',
     components: {
-        blogCard
+        blogCard,
     },
-    data() {
-        return {
-            blogDatas: [{
-                    id: 1,
-                    title: "Learning Vue js 3",
-                    content: "I am Learning Vue js 3 with the composition API.it is great",
-                    like: 5,
-                    hashtags: ["#Vue", "#Javascript", "#CompositionApi"],
-                },
-                {
-                    id: 2,
-                    title: "Learning Vuex",
-                    content: "vuex is a state management solution for Vue .its allows you to logically separate entities into Modules.",
-                    like: 3,
-                    hashtags: ["#Vue", "#Vuex", "#Flux"],
-                },
-                {
-                    id: 3,
-                    title: "Routing With Vue Router",
-                    content: "I am creating complex front-end app using vue-router",
-                    like: 1,
-                    hashtags: ["#Vue", "#VueRouter"],
-                },
-                {
-                    id: 4,
-                    title: "Testing Vue Apps",
-                    content: "I am writing Some Tests for My application using test utils. Testing is critical but often overlooked due to complexity or time constraints",
-                    like: 1,
-                    hashtags: ["#Vue", "#Javascript", "#Testing"],
-                },
-            ],
+    setup() {
+        const {
+            blogDatas,
+            searchTerm,
+            selectedTopic,
+            timer,
+            increaseLike,
+            debounceSearch
+        } = blogData();
 
-            searchTerm: "",
-            selectedHashtag: null,
-            timer: null
-
-        };
-    },
-    computed: {
-        filteredBlogDatas() {
-            if (this.selectedHashtag) {
-                return this.blogDatas.filter((blogData) =>
-                    blogData.hashtags.includes(this.selectedHashtag)
+        const filteredBlogDatas = computed(() => {
+            const searchTermLower = searchTerm.value.toLowerCase()
+            if (selectedTopic.value) {
+                return blogDatas.value.filter((blogData) =>
+                    blogData.topics.includes(selectedTopic.value)
                 );
             } else {
-                return this.blogDatas.filter((blogData) =>
-                    blogData.hashtags.some((hashtag) =>
-                        hashtag.includes(this.searchTerm)
-                    )
+                return blogDatas.value.filter((blogData) =>
+                    blogData.topics.some((topic) => topic.toLowerCase().includes(searchTermLower))
                 );
             }
-        },
+        });
+
+        const hashTag = (topic) => {
+            selectedTopic.value = topic;
+            searchTerm.value = '';
+        };
+
+        return {
+            blogDatas,
+            searchTerm,
+            selectedTopic,
+            timer,
+            increaseLike,
+            debounceSearch,
+            filteredBlogDatas,
+            hashTag,
+        };
     },
-    methods: {
-        increaseLike(id) {
-            const blogData = this.blogDatas.find((data) => data.id === id);
-            blogData.like++;
-        },
-
-        debounceSearch: function () {
-            clearTimeout(this.timer);
-            this.timer = setTimeout(() => {
-                this.selectedHashtag = this.searchTerm;
-            }, 500);
-        },
-
-    }
 };
 </script>
 

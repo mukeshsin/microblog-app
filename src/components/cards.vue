@@ -12,8 +12,8 @@
         <div class="card-likes">
             <slot name="likes"></slot>
         </div>
-        <div class="card-hashtag">
-            <slot name="hashTags"></slot>
+        <div class="card-topics">
+            <slot name="topics"></slot>
         </div>
 
     </div>
@@ -36,7 +36,7 @@ export default {
     margin: 10px;
     width: 15%;
     box-shadow: 1px 2px 3px 2px #888888;
-    border-radius:7px;
+    border-radius: 7px;
 
 }
 
