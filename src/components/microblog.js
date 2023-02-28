@@ -1,61 +1,64 @@
-import { ref } from "vue";
+import { ref, computed } from "vue";
 
 export const blogData = () => {
-  const blogDatas = ref([
-    {
-      id: 1,
-      title: "Learning Vue js 3",
-      content: "I am Learning Vue js 3 with the composition API.it is great",
-      like: 5,
-      topics: ["#Vue", "#Javascript", "#CompositionApi"],
-    },
-    {
-      id: 2,
-      title: "Learning Vuex",
-      content:
-        "vuex is a state management solution for Vue .its allows you to logically separate entities into Modules.",
-      like: 3,
-      topics: ["#Vue", "#Vuex", "#Flux"],
-    },
-    {
-      id: 3,
-      title: "Routing With Vue Router",
-      content: "I am creating complex front-end app using vue-router",
-      like: 1,
-      topics: ["#Vue", "#VueRouter"],
-    },
-    {
-      id: 4,
-      title: "Testing Vue Apps",
-      content:
-        "I am writing Some Tests for My application using test utils. Testing is critical but often overlooked due to complexity or time constraints",
-      like: 1,
-      topics: ["#Vue", "#Javascript", "#Testing"],
-    },
-  ]);
+  const fetchData = async () => {
+    let res = await fetch(
+      "https://mockend.com/meanstack9716/jsonAPIData/posts"
+    );
+    let data = await res.json();
+    console.log(data);
+    return data;
+  };
+
+  const blogDatas = ref([]);
+  fetchData().then((data) => {
+    blogDatas.value = data;
+  });
 
   const searchTerm = ref("");
-  const selectedTopic = ref(null);
+  const selectedHashtag = ref(null);
   const timer = ref(null);
 
-  const increaseLike = (id) => {
-    const blogData = blogDatas.value.find((data) => data.id === id);
-    blogData.like++;
+  const filteredBlogDatas = computed(() => {
+    const searchTermLower = searchTerm.value.toLowerCase();
+    const selectedHashtagLower = selectedHashtag.value ? selectedHashtag.value.toLowerCase() : null;
+  
+    if (selectedHashtagLower !== null) {
+      return blogDatas.value.filter((blogData) =>
+        blogData.hashtag.toLowerCase().includes(selectedHashtagLower)
+      );
+    } else {
+      return blogDatas.value.filter((blogData) =>
+        blogData.hashtag.toLowerCase().includes(searchTermLower)
+      );
+    }
+  });
+  
+  const hashTag = (key) => {
+    selectedHashtag.value = key;
+    searchTerm.value = "";
+  };
+
+  const increaseView = (key) => {
+    blogDatas.value[key - 1].views += 1;
   };
 
   const debounceSearch = () => {
     clearTimeout(timer.value);
     timer.value = setTimeout(() => {
-      selectedTopic.value = '';
+      selectedHashtag.value = null;
     }, 500);
   };
 
   return {
     blogDatas,
     searchTerm,
-    selectedTopic,
+    selectedHashtag,
     timer,
-    increaseLike,
+    increaseView,
     debounceSearch,
+    hashTag,
+    filteredBlogDatas,
   };
 };
+
