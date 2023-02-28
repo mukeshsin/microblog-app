@@ -5,20 +5,16 @@
         <input class="inputField" type="text" v-model="searchTerm" @keyup="debounceSearch" />
     </form>
     <div class="cardWrapper">
-        <blogCard v-for="blogData in filteredBlogDatas" :key="blogData.id">
+        <blogCard v-for="blogData in blogDatas" :key="blogData.id">
             <template v-slot:title>{{ blogData.title }}</template>
-            <template v-slot:content>{{ blogData.content }}</template>
-            <template v-slot:likes>
+            <template v-slot:body>{{ blogData.body }}</template>
+            <template v-slot:view>
                 <div class="icon" @click="increaseLike(blogData.id)">
                     <i class="fa-sharp fa-solid fa-heart"></i>
-                    <p class="numbLike">{{ blogData.like }}</p>
+                    <p class="numbLike">{{ blogData.views }}</p>
                 </div>
             </template>
-            <template v-slot:topics>
-                <div v-for="topic in blogData.topics" :key="topic.id">
-                    <span @click="hashTag(topic)"> {{ topic }}</span>
-                </div>
-            </template>
+            <template v-slot:hashtag> #{{ blogData.hashtag }}</template>
         </blogCard>
     </div>
 </div>
@@ -42,39 +38,36 @@ export default {
         const {
             blogDatas,
             searchTerm,
-            selectedTopic,
+            selectedHashtag,
             timer,
             increaseLike,
             debounceSearch
         } = blogData();
 
         const filteredBlogDatas = computed(() => {
-            const searchTermLower = searchTerm.value.toLowerCase()
-            if (selectedTopic.value) {
+            const searchTermLower = searchTerm.value.toLowerCase();
+            if (selectedHashtag.value) {
                 return blogDatas.value.filter((blogData) =>
-                    blogData.topics.includes(selectedTopic.value)
+                    blogData.hashtag.includes(selectedHashtag.value)
                 );
             } else {
                 return blogDatas.value.filter((blogData) =>
-                    blogData.topics.some((topic) => topic.toLowerCase().includes(searchTermLower))
+                    blogData.hashtag.some((hashtag) =>
+                        hashtag.toLowerCase().includes(searchTermLower)
+                    )
                 );
             }
         });
 
-        const hashTag = (topic) => {
-            selectedTopic.value = topic;
-            searchTerm.value = '';
-        };
-
         return {
             blogDatas,
             searchTerm,
-            selectedTopic,
+            selectedHashtag,
             timer,
             increaseLike,
             debounceSearch,
             filteredBlogDatas,
-            hashTag,
+
         };
     },
 };
@@ -83,7 +76,7 @@ export default {
 <style>
 .cardWrapper {
     display: flex;
-
+    flex-wrap: wrap;
 }
 
 .adjustInput {

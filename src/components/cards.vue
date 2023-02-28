@@ -4,16 +4,16 @@
         <slot name="title"></slot>
     </div>
 
-    <div class="card-content">
-        <slot name="content"></slot>
+    <div class="card-content">cd 
+        <slot name="body"></slot>
 
     </div>
     <div class="card-footer">
         <div class="card-likes">
-            <slot name="likes"></slot>
+            <slot name="view"></slot>
         </div>
         <div class="card-topics">
-            <slot name="topics"></slot>
+            <slot name="hashtag"></slot>
         </div>
 
     </div>
@@ -34,7 +34,7 @@ export default {
     text-align: center;
     border: 2px solid grey;
     margin: 10px;
-    width: 15%;
+    width:17%;
     box-shadow: 1px 2px 3px 2px #888888;
     border-radius: 7px;
 
@@ -67,5 +67,9 @@ export default {
     width: 100%;
     font-weight: bold;
 
+}
+
+.card-topics{
+     text-decoration: underline 1px;
 }
 </style>
