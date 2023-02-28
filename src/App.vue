@@ -1,7 +1,7 @@
 <template>
 <div>
     <form>
-        <label>Search hashtag : #</label>
+        <label>Search hashtag: #</label>
         <input class="inputField" type="text" v-model="searchTerm" @keyup="debounceSearch" />
     </form>
     <div class="cardWrapper">
@@ -45,17 +45,18 @@ export default {
             selectedTopic,
             timer,
             increaseLike,
-            debounceSearch,
+            debounceSearch
         } = blogData();
 
         const filteredBlogDatas = computed(() => {
+            const searchTermLower = searchTerm.value.toLowerCase()
             if (selectedTopic.value) {
                 return blogDatas.value.filter((blogData) =>
                     blogData.topics.includes(selectedTopic.value)
                 );
             } else {
                 return blogDatas.value.filter((blogData) =>
-                    blogData.topics.some((topic) => topic.includes(searchTerm.value))
+                    blogData.topics.some((topic) => topic.toLowerCase().includes(searchTermLower))
                 );
             }
         });
@@ -73,8 +74,7 @@ export default {
             increaseLike,
             debounceSearch,
             filteredBlogDatas,
-            hashTag
-
+            hashTag,
         };
     },
 };
