@@ -7,17 +7,15 @@
     <div class="cardWrapper">
         <blogCard v-for="blogData in filteredBlogDatas" :key="blogData.id">
             <template v-slot:title>{{ blogData.title }}</template>
-            <template v-slot:content>{{ blogData.content }}</template>
-            <template v-slot:likes>
-                <div class="icon" @click="increaseLike(blogData.id)">
+            <template v-slot:body>{{ blogData.body }}</template>
+            <template v-slot:view>
+                <div class="icon" @click="increaseView(blogData.id)">
                     <i class="fa-sharp fa-solid fa-heart"></i>
-                    <p class="numbLike">{{ blogData.like }}</p>
+                    <p class="numbLike">{{ blogData.views }}</p>
                 </div>
             </template>
-            <template v-slot:topics>
-                <div v-for="topic in blogData.topics" :key="topic.id">
-                    <span @click="hashTag(topic)"> {{ topic }}</span>
-                </div>
+            <template v-slot:hashtag>
+                <span @click="hashTag(blogData.hashtag)">#{{ blogData.hashtag }}</span>
             </template>
         </blogCard>
     </div>
@@ -25,9 +23,6 @@
 </template>
 
 <script>
-import {
-    computed
-} from 'vue';
 import {
     blogData
 } from './components/microblog.js';
@@ -42,39 +37,24 @@ export default {
         const {
             blogDatas,
             searchTerm,
-            selectedTopic,
+            selectedHashtag,
             timer,
-            increaseLike,
-            debounceSearch
+            increaseView,
+            debounceSearch,
+            filteredBlogDatas,
+            hashTag,
         } = blogData();
-
-        const filteredBlogDatas = computed(() => {
-            const searchTermLower = searchTerm.value.toLowerCase()
-            if (selectedTopic.value) {
-                return blogDatas.value.filter((blogData) =>
-                    blogData.topics.includes(selectedTopic.value)
-                );
-            } else {
-                return blogDatas.value.filter((blogData) =>
-                    blogData.topics.some((topic) => topic.toLowerCase().includes(searchTermLower))
-                );
-            }
-        });
-
-        const hashTag = (topic) => {
-            selectedTopic.value = topic;
-            searchTerm.value = '';
-        };
 
         return {
             blogDatas,
             searchTerm,
-            selectedTopic,
+            selectedHashtag,
             timer,
-            increaseLike,
+            increaseView,
             debounceSearch,
             filteredBlogDatas,
-            hashTag,
+            hashTag
+
         };
     },
 };
@@ -83,7 +63,7 @@ export default {
 <style>
 .cardWrapper {
     display: flex;
-
+    flex-wrap: wrap;
 }
 
 .adjustInput {
